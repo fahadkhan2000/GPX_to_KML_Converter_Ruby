@@ -1,5 +1,5 @@
 require 'nokogiri'
-  require 'rubygems'
+require 'rubygems'
 
   class Coding
 =begin
@@ -35,4 +35,5 @@ require 'nokogiri'
     write_handler.puts(new_content).to_s
     write_handler.close
 =end
-  end
+
+

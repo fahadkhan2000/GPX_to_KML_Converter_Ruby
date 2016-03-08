@@ -159,7 +159,7 @@ class Gpx2kml
     coords.each do |c|
       points << {lon: c[:lon], lat: c[:lat], alt: c[:alt]}
     end
-    points_list = DouglasPeucker.new(epsylon).simplify_line(points)
+    points_list = algorithm.new(epsylon).simplify_line(points)
 
     track = ""
     points_list.each do |c|
@@ -167,28 +167,6 @@ class Gpx2kml
     end
 
     return track
-  end
-
-
-  def get_exif_picture(picture)
-    picture = MiniExiftool.new picture
-
-    lat_dms   = picture['GPSLatitude']
-    long_dms  = picture['GPSLongitude']
-
-    latitude  = dms_to_decimal(lat_dms)
-    longitude = dms_to_decimal(long_dms)
-
-    latitude  *= -1   if picture['GPSLatitudeRef'] == 'S'
-    longitude *= -1   if picture['GPSLongitudeRef'] == 'West'
-
-    {
-        lon:        longitude,
-        lat:        latitude,
-        name:       picture['filename'],
-        camera:     picture['model'],
-        date_time:  picture['DateTimeOriginal']
-    }
   end
 
   def dms_to_decimal(dms)
