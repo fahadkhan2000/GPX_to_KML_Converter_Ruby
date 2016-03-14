@@ -56,6 +56,7 @@ read_gpx method
     {title: gpx.xpath('//gpx/trk/name').text, desc: gpx.xpath('//gpx/trk/desc').text, coords: coords}
 
     puts '(1) - read_gpx() executed successfully...'
+    return coords
   end
 
 
@@ -96,6 +97,7 @@ proc_time method
     puts epsilon
 
     @styles = build_styles()
+    @files = add_files('test_gpx_file_1')
 
     kml_builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
 
@@ -129,8 +131,8 @@ proc_time method
             xml.open 0
 
             i = 0
-            ##@files.each do |gpx|
-            detail = read_gpx('test_gpx_file_1')
+            @files.each do |gpx|
+            coordes = read_gpx(gpx)
 
             xml.Placemark do
               xml.visibility 0
@@ -142,11 +144,11 @@ proc_time method
                 xml.extrude true
                 xml.tessellate true
                 xml.altitudeMode "clampToGround"
-                ##xml.coordinates format_track(detail[:coords], epsilon)
+                xml.coordinates format_track(coordes, epsilon)
               end
             end
             i += 1
-            ##end
+            end
           end
         end
       end
@@ -155,6 +157,7 @@ proc_time method
 
     kml_text = kml_builder.to_xml
     puts kml_text
+
     out_handler = File.new("kml_output.out", "w")
     out_handler.puts(kml_text).to_s
     out_handler.close
@@ -166,6 +169,7 @@ proc_time method
 =end
   def init_epsilon(epsilon = 10e-8)
     @epsilon = epsilon
+    return epsilon
   end
 
 =begin
@@ -188,7 +192,7 @@ proc_time method
     coords.each do |c|
       points << {lon: c[:lon], lat: c[:lat], alt: c[:alt]}
     end
-    points_list = algorithm.new(epsilon).simplify_line(points)
+    points_list = simplify_line(points)
 
     track = ""
     points_list.each do |c|
@@ -210,7 +214,8 @@ proc_time method
       end
     end
 
-    if dmax >= @epsilon
+    epsilon = init_epsilon()
+    if dmax >= epsilon
       results_1 = simplify_line(points[0..index])
       results_2 = simplify_line(points[index..-1])
 
@@ -237,6 +242,10 @@ proc_time method
     denominator = (line[:end][:x] - line[:start][:x])**2 + (line[:end][:y] - line[:start][:y])**2
 
     numerator.abs/denominator**0.5
+  end
+
+  def add_files(files)
+    @files = files.split(',')
   end
 
 end
