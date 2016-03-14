@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+  <Document>
+    <name>Converted from GPX file</name>
+    <description><![CDATA[<p>Converted using <b><a href='http://github.com/shakaman/gpx2kml' title='Go to gpx2kml on github'>Github</a></b></p>]]></description>
+    <visibility>1</visibility>
+    <open>1</open>
+    <Style id="red">
+      <LineStyle>
+        <color>C81400FF</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="blue">
+      <LineStyle>
+        <color>C8FF7800</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="pink">
+      <LineStyle>
+        <color>96F0FF14</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="green">
+      <LineStyle>
+        <color>C878FF00</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="orange">
+      <LineStyle>
+        <color>C81478FF</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="dark_green">
+      <LineStyle>
+        <color>96008C14</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Style id="pink2">
+      <LineStyle>
+        <color>C8A078F0</color>
+        <width>4</width>
+      </LineStyle>
+    </Style>
+    <Folder>
+      <name>Tracks</name>
+      <description>A list of tracks</description>
+      <visibility>1</visibility>
+      <open>0</open>
+      <Placemark>
+        <visibility>0</visibility>
+        <open>0</open>
+        <styleUrl>#red</styleUrl>
+        <name>kmlFile</name>
+        <description>this is kml file</description>
+        <LineString>
+          <extrude>true</extrude>
+          <tessellate>true</tessellate>
+          <altitudeMode>clampToGround</altitudeMode>
+        </LineString>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

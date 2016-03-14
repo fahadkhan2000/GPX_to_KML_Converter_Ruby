@@ -1,3 +1,4 @@
+=begin
 # encoding: utf-8
 $:.unshift(File.dirname(__FILE__))
 
@@ -107,6 +108,7 @@ class Gpx2kml
 
   def get_kml
     @kml.to_xml
+    puts 'successfull...'
   end
 
   # Create track style
@@ -192,3 +194,6 @@ class Gpx2kml
     end
   end
 end
+
+
+Gpx2kml.new.get_kml=end
