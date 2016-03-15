@@ -45,58 +45,26 @@ class Coding
   end
 
   def build_kml(epsilon)
-    if epsilon.nil?
-      epsilon = 30e-5
-    end
-    epsilon = epsilon.to_f
-    @styles = build_styles()
-    @files = add_files('test_gpx_file_1')
+    set_epsilon_styles_and_addFiles(epsilon)
 
     kml_builder = Nokogiri::XML::Builder.new(:encoding => 'UTF-8') do |xml|
       xml.kml('xmlns' => 'http://www.opengis.net/kml/2.2',
               'xmlns:gx' => 'http://www.google.com/kml/ext/2.2',
               'xmlns:kml' => 'http://www.opengis.net/kml/2.2',
               'xmlns:atom' => 'http://www.w3.org/2005/Atom') do
-
         xml.Document do
-          xml.name "Converted from GPX file"
-          xml.description {
-            xml.cdata "<p>Converted using <b><a href='http://github.com/shakaman/gpx2kml' title='Go to gpx2kml on github'>Github</a></b></p>"
-          }
-          xml.visibility 1
-          xml.open 1
-
-          @styles.each do |s|
-            xml.Style(:id => s[:id]) {
-              xml.LineStyle {
-                xml.color_ s[:LineStyle][:color]
-                xml.width_ s[:LineStyle][:width]
-              }
-            }
-          end
-
+          set_document_properties(xml)
+          set_color_and_width(xml)
           # Tracks
           xml.Folder do
-            xml.name "Tracks"
-            xml.description "A list of tracks"
-            xml.visibility 1
-            xml.open 0
-
+            set_folder_properties(xml)
             i = 0
             @files.each do |gpx|
               coordes = read_gpx(gpx)
-
               xml.Placemark do
-                xml.visibility 0
-                xml.open 0
-                xml.styleUrl "##{@styles[i][:id]}"
-                xml.name 'kmlFile'
-                xml.description 'this is kml file'
+                set_placemark_properties(xml, i)
                 xml.LineString do
-                  xml.extrude true
-                  xml.tessellate true
-                  xml.altitudeMode "clampToGround"
-                  xml.coordinates format_track(coordes, epsilon)
+                  set_LineString_properties(xml, coordes, epsilon)
                 end
               end
               i += 1
@@ -105,17 +73,71 @@ class Coding
         end
       end
     end
-
     kml_text = kml_builder.to_xml
+    write_to_kml(kml_text)
+  end
+
+  def write_to_kml(kml_text)
     puts kml_text
     out_handler = File.new("kml_output.out", "w")
     out_handler.puts(kml_text).to_s
     out_handler.close
   end
 
+  def set_LineString_properties(xml, coordes, epsilon)
+    xml.extrude true
+    xml.tessellate true
+    xml.altitudeMode "clampToGround"
+    xml.coordinates format_track(coordes, epsilon)
+  end
+
+  def set_placemark_properties(xml, i)
+    xml.visibility 0
+    xml.open 0
+    xml.styleUrl "##{@styles[i][:id]}"
+    xml.name 'kmlFile'
+    xml.description 'this is kml file'
+  end
+
+  def set_folder_properties(xml)
+    xml.name "Tracks"
+    xml.description "A list of tracks"
+    xml.visibility 1
+    xml.open 0
+  end
+
   def init_epsilon(epsilon = 10e-8)
     @epsilon = epsilon
     return epsilon
+  end
+
+  def set_color_and_width(xml)
+    @styles.each do |s|
+      xml.Style(:id => s[:id]) {
+        xml.LineStyle {
+          xml.color_ s[:LineStyle][:color]
+          xml.width_ s[:LineStyle][:width]
+        }
+      }
+    end
+  end
+
+  def set_document_properties(xml)
+    xml.name "Converted from GPX file"
+    xml.description {
+      xml.cdata "<p>Converted using <b><a href='http://github.com/fahadkhan2000/GPX_2_KML_Converter_Ruby' title='Go to gpx2kml on github'>Github</a></b></p>"
+    }
+    xml.visibility 1
+    xml.open 1
+  end
+
+  def set_epsilon_styles_and_addFiles(epsilon)
+    if epsilon.nil?
+      epsilon = 30e-5
+    end
+    epsilon = epsilon.to_f
+    @styles = build_styles()
+    @files = add_files('gpx.xml')
   end
 
   def build_styles
@@ -139,7 +161,6 @@ class Coding
     points_list.each do |c|
       track << "#{c[:lon]}, #{c[:lat]}, #{c[:alt]}, \n"
     end
-
     return track
   end
 
@@ -159,7 +180,6 @@ class Coding
     if dmax >= epsilon
       results_1 = simplify_line(points[0..index])
       results_2 = simplify_line(points[index..-1])
-
       results_1[0..-2] + results_2
     else
       [points.first, points.last]
@@ -178,18 +198,15 @@ class Coding
         }
     }
     point = {x: point[:lat].to_f, y: point[:lon].to_f}
-
     numerator = ((line[:end][:x] - line[:start][:x])*(line[:start][:y] - point[:y]) - (line[:start][:x] - point[:x])*(line[:end][:y] - line[:start][:y]))
     denominator = (line[:end][:x] - line[:start][:x])**2 + (line[:end][:y] - line[:start][:y])**2
-
     numerator.abs/denominator**0.5
   end
 
   def add_files(files)
     @files = files.split(',')
   end
-
 end
 
-Coding.new.read_gpx('test_gpx_file_1')
+Coding.new.read_gpx('gpx.xml')
 Coding.new.build_kml(nil)

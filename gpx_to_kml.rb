@@ -196,4 +196,5 @@ class Gpx2kml
 end
 
 
-Gpx2kml.new.get_kml=end
+Gpx2kml.new.get_kml
+=end

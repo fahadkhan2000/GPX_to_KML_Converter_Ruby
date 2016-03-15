@@ -2,7 +2,7 @@
 <kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
   <Document>
     <name>Converted from GPX file</name>
-    <description><![CDATA[<p>Converted using <b><a href='http://github.com/shakaman/gpx2kml' title='Go to gpx2kml on github'>Github</a></b></p>]]></description>
+    <description><![CDATA[<p>Converted using <b><a href='http://github.com/fahadkhan2000/GPX_2_KML_Converter_Ruby' title='Go to gpx2kml on github'>Github</a></b></p>]]></description>
     <visibility>1</visibility>
     <open>1</open>
     <Style id="red">
